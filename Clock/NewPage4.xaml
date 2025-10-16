@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="Clock.NewPage4"
+             Title="Таймер">
+    <ScrollView>
+        <VerticalStackLayout Spacing="20" Padding="30">
+
+            <!-- Заголовок -->
+            <Label Text="Таймер" 
+                   FontSize="32" 
+                   HorizontalOptions="Center" />
+
+            <!-- Отображение времени -->
+            <Label x:Name="TimeLabel" 
+                   Text="00:00:00" 
+                   FontSize="48" 
+                   HorizontalOptions="Center" 
+                   TextColor="Black"/>
+
+            <!-- Выбор времени -->
+            <Frame BackgroundColor="#f0f0f0" Padding="15">
+                <VerticalStackLayout Spacing="10">
+                    <Label Text="Установите время:" FontSize="16"/>
+
+                    <Grid ColumnDefinitions="*,*,*" RowDefinitions="Auto,Auto,Auto" ColumnSpacing="10">
+                        <!-- Часы -->
+                        <Label Text="Часы:" Grid.Row="0" Grid.Column="0"/>
+                        <Entry x:Name="HoursEntry" 
+                               Text="0" 
+                               Keyboard="Numeric" 
+                               Grid.Row="1" Grid.Column="0"/>
+
+                        <!-- Минуты -->
+                        <Label Text="Минуты:" Grid.Row="0" Grid.Column="1"/>
+                        <Entry x:Name="MinutesEntry" 
+                               Text="1" 
+                               Keyboard="Numeric" 
+                               Grid.Row="1" Grid.Column="1"/>
+
+                        <!-- Секунды -->
+                        <Label Text="Секунды:" Grid.Row="0" Grid.Column="2"/>
+                        <Entry x:Name="SecondsEntry" 
+                               Text="0" 
+                               Keyboard="Numeric" 
+                               Grid.Row="1" Grid.Column="2"/>
+                    </Grid>
+                </VerticalStackLayout>
+            </Frame>
+
+            <!-- Кнопки управления -->
+            <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                <Button x:Name="StartButton" 
+                        Text="Запустить таймер" 
+                        Clicked="OnStartClicked" 
+                        BackgroundColor="Green" 
+                        TextColor="White"
+                        Grid.Column="0"/>
+
+                <Button x:Name="StopButton" 
+                        Text="Остановить таймер" 
+                        Clicked="OnStopClicked" 
+                        BackgroundColor="Orange" 
+                        TextColor="White"
+                        Grid.Column="1"/>
+            </Grid>
+
+            <Button x:Name="ResetButton" 
+                    Text="Сбросить таймер" 
+                    Clicked="OnResetClicked" 
+                    BackgroundColor="Red" 
+                    TextColor="White"/>
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
