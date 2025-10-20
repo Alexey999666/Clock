@@ -1,4 +1,4 @@
-using System.Timers;
+п»їusing System.Timers;
 
 namespace Clock;
 
@@ -7,38 +7,43 @@ public partial class NewPage4 : ContentPage
     private System.Timers.Timer _timer;
     private TimeSpan _remainingTime;
     private bool _isRunning = false;
+    private bool _isPaused = false;
+    private TimeSpan _pausedTime;
+
     public NewPage4()
-	{
-		InitializeComponent();
-        // Инициализация таймера
+    {
+        InitializeComponent();
+        
         InitializeTimer();
 
-        // Установка начального времени
         UpdateRemainingTime();
         UpdateDisplay();
+
+        
+        UpdateButtonVisibility();
     }
 
     private void InitializeTimer()
     {
-        // Создаем таймер с интервалом 1 секунда
+       
         _timer = new System.Timers.Timer(1000);
         _timer.Elapsed += OnTimerElapsed;
 
-        // Для работы с UI из таймера
+        
         _timer.SynchronizingObject = null;
     }
 
     private void OnTimerElapsed(object sender, ElapsedEventArgs e)
     {
-        // Уменьшаем оставшееся время на 1 секунду
+      
         _remainingTime = _remainingTime.Subtract(TimeSpan.FromSeconds(1));
 
-        // Обновляем отображение в основном потоке
+     
         MainThread.BeginInvokeOnMainThread(() =>
         {
             UpdateDisplay();
 
-            // Проверяем, истекло ли время
+            
             if (_remainingTime.TotalSeconds <= 0)
             {
                 TimerFinished();
@@ -48,12 +53,12 @@ public partial class NewPage4 : ContentPage
 
     private void UpdateRemainingTime()
     {
-        // Получаем значения из полей ввода
+        
         int hours = GetSafeInt(HoursEntry.Text);
         int minutes = GetSafeInt(MinutesEntry.Text);
         int seconds = GetSafeInt(SecondsEntry.Text);
 
-        // Устанавливаем оставшееся время
+       
         _remainingTime = new TimeSpan(hours, minutes, seconds);
     }
 
@@ -66,16 +71,17 @@ public partial class NewPage4 : ContentPage
 
     private void UpdateDisplay()
     {
-        // Форматируем время для отображения
+       
         TimeLabel.Text = _remainingTime.ToString(@"hh\:mm\:ss");
 
-        // Меняем цвет в зависимости от состояния
+        
         TimeLabel.TextColor = _isRunning ? Color.FromArgb("#2196F3") : Color.FromArgb("#000000");
     }
 
     private void TimerFinished()
     {
         _isRunning = false;
+        _isPaused = false;
         _timer.Stop();
 
         MainThread.BeginInvokeOnMainThread(async () =>
@@ -83,52 +89,93 @@ public partial class NewPage4 : ContentPage
             TimeLabel.TextColor = Color.FromArgb("#FF0000");
             TimeLabel.Text = "00:00:00";
 
-            // Показываем уведомление
-            await DisplayAlert("Таймер", "Время вышло!", "OK");
+           
+            UpdateButtonVisibility();
+
+            
+            await DisplayAlert("РўР°Р№РјРµСЂ", "РўРІРѕРµ РІСЂРµРјСЏ РІС‹С€Р»Рѕ!!!\n вЋ›вЋќ( ` бўЌ Вґ )вЋ вЋћбµђбµК°бµѓК°бµѓ\n рџ’Ђв пёЏрџ’Ђв пёЏрџ’Ђ\n рџҐЂрџЄ¦вљ°пёЏ", "OK");
         });
     }
 
-    // Обработчики кнопок
+  
     private void OnStartClicked(object sender, EventArgs e)
     {
         if (!_isRunning)
         {
-            // Если таймер не запущен, обновляем время и запускаем
-            if (!_isRunning)
+            
+            if (!_isRunning && !_isPaused)
             {
                 UpdateRemainingTime();
+            }
+            else if (_isPaused)
+            {
+               
+                _remainingTime = _pausedTime;
             }
 
             if (_remainingTime.TotalSeconds > 0)
             {
                 _isRunning = true;
+                _isPaused = false;
                 _timer.Start();
                 UpdateDisplay();
+                UpdateButtonVisibility();
             }
             else
             {
-                DisplayAlert("Ошибка", "Установите время больше 0", "OK");
+                DisplayAlert("РћС€РёР±РєР°", "РЈСЃС‚Р°РЅРѕРІРёС‚Рµ РІСЂРµРјСЏ Р±РѕР»СЊС€Рµ 0", "OK");
             }
         }
     }
 
-    private void OnStopClicked(object sender, EventArgs e)
+    private void OnPauseClicked(object sender, EventArgs e)
     {
         if (_isRunning)
         {
             _isRunning = false;
+            _isPaused = true;
+            _pausedTime = _remainingTime;
             _timer.Stop();
             UpdateDisplay();
+            UpdateButtonVisibility();
         }
     }
 
     private void OnResetClicked(object sender, EventArgs e)
     {
         _isRunning = false;
+        _isPaused = false;
         _timer.Stop();
 
-        // Сбрасываем время к исходному значению из полей ввода
+        
         UpdateRemainingTime();
         UpdateDisplay();
+        UpdateButtonVisibility();
+    }
+
+   
+    private void UpdateButtonVisibility()
+    {
+        MainThread.BeginInvokeOnMainThread(() =>
+        {
+            if (!_isRunning && !_isPaused)
+            {
+               
+                StartButton.IsVisible = true;
+                ControlButtonsGrid.IsVisible = false;
+            }
+            else if (_isRunning)
+            {
+               
+                StartButton.IsVisible = false;
+                ControlButtonsGrid.IsVisible = true;
+            }
+            else if (_isPaused)
+            {
+            
+                StartButton.IsVisible = true;
+                ControlButtonsGrid.IsVisible = false;
+            }
+        });
     }
 }

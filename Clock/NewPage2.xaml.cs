@@ -26,7 +26,7 @@ public partial class NewPage2 : ContentPage
         lblTimeWatch.Text = moscowTime.ToString("HH:mm:ss");
 
       
-        lblDataWatch.Text = "Текушее: " + moscowTime.ToString("dd.MM.yyyy");
+        lblDataWatch.Text = "Текущее: " + moscowTime.ToString("dd.MM.yyyy");
     }
     private void SetupTimer()
     {

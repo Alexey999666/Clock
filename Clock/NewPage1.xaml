@@ -3,10 +3,139 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              x:Class="Clock.NewPage1"
              Title="Будильник">
-    <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
-    </VerticalStackLayout>
+    <ScrollView>
+        <VerticalStackLayout Spacing="20" Padding="30">
+
+          
+            <Frame BackgroundColor="#f0f0f0" Padding="15">
+                <VerticalStackLayout Spacing="15">
+                    <Label Text="Новый будильник:" 
+                           FontSize="18" 
+                           FontAttributes="Bold"
+                           HorizontalOptions="Center"/>
+
+                    
+                    <Label Text="Время:" FontSize="16"/>
+                    <TimePicker x:Name="NewAlarmTimePicker"
+                                Time="08:00"
+                                FontSize="16"
+                                HorizontalOptions="Center"/>
+
+                    
+                    <Label Text="Дни повторения:" FontSize="16"/>
+
+                    <Grid ColumnDefinitions="*,*,*,*,*,*,*" 
+                          ColumnSpacing="5"
+                          HorizontalOptions="Center">
+
+                        <Button x:Name="MonButton" Text="Пн" Grid.Column="0"
+                                Clicked="OnDayButtonClicked"
+                                BackgroundColor="LightGray"
+                                TextColor="Black"
+                                WidthRequest="40"
+                                HeightRequest="40"
+                                CornerRadius="20"/>
+                        <Button x:Name="TueButton" Text="Вт" Grid.Column="1"
+                                Clicked="OnDayButtonClicked"
+                                BackgroundColor="LightGray"
+                                TextColor="Black"
+                                WidthRequest="40"
+                                HeightRequest="40"
+                                CornerRadius="20"/>
+                        <Button x:Name="WedButton" Text="Ср" Grid.Column="2"
+                                Clicked="OnDayButtonClicked"
+                                BackgroundColor="LightGray"
+                                TextColor="Black"
+                                WidthRequest="40"
+                                HeightRequest="40"
+                                CornerRadius="20"/>
+                        <Button x:Name="ThuButton" Text="Чт" Grid.Column="3"
+                                Clicked="OnDayButtonClicked"
+                                BackgroundColor="LightGray"
+                                TextColor="Black"
+                                WidthRequest="40"
+                                HeightRequest="40"
+                                CornerRadius="20"/>
+                        <Button x:Name="FriButton" Text="Пт" Grid.Column="4"
+                                Clicked="OnDayButtonClicked"
+                                BackgroundColor="LightGray"
+                                TextColor="Black"
+                                WidthRequest="40"
+                                HeightRequest="40"
+                                CornerRadius="20"/>
+                        <Button x:Name="SatButton" Text="Сб" Grid.Column="5"
+                                Clicked="OnDayButtonClicked"
+                                BackgroundColor="LightGray"
+                                TextColor="Black"
+                                WidthRequest="40"
+                                HeightRequest="40"
+                                CornerRadius="20"/>
+                        <Button x:Name="SunButton" Text="Вс" Grid.Column="6"
+                                Clicked="OnDayButtonClicked"
+                                BackgroundColor="LightGray"
+                                TextColor="Black"
+                                WidthRequest="40"
+                                HeightRequest="40"
+                                CornerRadius="20"/>
+                    </Grid>
+
+                    
+                    <Button x:Name="AddAlarmButton"
+                            Text="➕ Добавить будильник"
+                            Clicked="OnAddAlarmClicked"
+                            BackgroundColor="AliceBlue"
+                            TextColor="Red"
+                            HorizontalOptions="Center"
+                            Padding="20,10"/>
+                </VerticalStackLayout>
+            </Frame>
+
+            
+            <Label Text="Мои будильники:" 
+                   FontSize="18" 
+                   FontAttributes="Bold"/>
+
+            <CollectionView x:Name="AlarmsCollectionView">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame BackgroundColor="#f8f8f8" 
+                               Padding="15" 
+                               Margin="0,5">
+                            <VerticalStackLayout Spacing="10">
+                                
+                                <Grid ColumnDefinitions="*,Auto">
+                                    <Label Text="{Binding Time}" 
+                                           Grid.Column="0"
+                                           FontSize="24"
+                                           FontAttributes="Bold"
+                                           VerticalOptions="Center"/>
+                                    <Switch x:Name="AlarmSwitch"
+                                            Grid.Column="1"
+                                            IsToggled="{Binding IsEnabled}"
+                                            Toggled="OnAlarmToggled"
+                                            HorizontalOptions="End"
+                                            VerticalOptions="Center"/>
+                                </Grid>
+
+                                
+                                <Label Text="{Binding DaysText}" 
+                                       FontSize="12"
+                                       TextColor="Gray"/>
+
+                                
+                                <Button Text="🗑️ Удалить"
+                                        Clicked="OnDeleteAlarmClicked"
+                                        BackgroundColor="LightCoral"
+                                        TextColor="White"
+                                        HorizontalOptions="End"
+                                        FontSize="12"
+                                        Padding="10,5"/>
+                            </VerticalStackLayout>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+
+        </VerticalStackLayout>
+    </ScrollView>
 </ContentPage>
